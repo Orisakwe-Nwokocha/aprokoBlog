@@ -4,8 +4,12 @@ import africa.semicolon.aprokoBlog.data.models.User;
 import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.RegisterRequest;
 import africa.semicolon.aprokoBlog.dtos.responses.RegisterUserResponse;
+import africa.semicolon.aprokoBlog.exceptions.UserExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static africa.semicolon.aprokoBlog.utils.Cleaner.cleanup;
+import static africa.semicolon.aprokoBlog.utils.Mapper.map;
 
 @Service
 public class UserServicesImpl implements UserServices {
@@ -14,13 +18,18 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public RegisterUserResponse register(RegisterRequest registerRequest) {
-        User newUser = new User();
-        newUser.setFirstName(registerRequest.getFirstName());
-        newUser.setLastName(registerRequest.getLastName());
-        newUser.setPassword(registerRequest.getPassword());
-        newUser.setUsername(registerRequest.getUsername());
+        registerRequest.setUsername(cleanup(registerRequest.getUsername()));
+        validate(registerRequest.getUsername());
+        User newUser = map(registerRequest);
         users.save(newUser);
 
         return null;
     }
+
+    private void validate(String username) {
+        boolean userExists = users.existsByUsername(username);
+        if (userExists) throw new UserExistsException(String.format("%s already exists", username));
+    }
+
+
 }
