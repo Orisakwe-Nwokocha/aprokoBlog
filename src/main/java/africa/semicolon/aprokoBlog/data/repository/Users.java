@@ -2,7 +2,6 @@ package africa.semicolon.aprokoBlog.data.repository;
 
 import africa.semicolon.aprokoBlog.data.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
 
-public interface UserRepository extends MongoRepository<User, String> {
+public interface Users extends MongoRepository<User, String> {
 }
