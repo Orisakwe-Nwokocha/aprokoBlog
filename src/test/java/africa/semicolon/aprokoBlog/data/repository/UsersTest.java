@@ -17,10 +17,8 @@ public class UsersTest {
     public void usersTest(){
         User newUser = new User();
         var savedUser = users.save(newUser);
-
         assertThat(savedUser.getId(), notNullValue());
         assertThat(users.count(), is(1L));
-
     }
 
 }
