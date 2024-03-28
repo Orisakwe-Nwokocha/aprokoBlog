@@ -46,6 +46,8 @@ public class UserServicesImpl implements UserServices {
     public CreatePostResponse createPost(CreatePostRequest createPostRequest) {
         User foundUser = findUserBy(createPostRequest.getUsername());
         Post newPost = postServices.createPost(createPostRequest);
+        foundUser.getPosts().add(newPost);
+        users.save(foundUser);
         return createPostResponseMap(newPost);
     }
 

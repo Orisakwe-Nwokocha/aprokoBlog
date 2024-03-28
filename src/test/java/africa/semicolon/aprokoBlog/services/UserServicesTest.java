@@ -97,9 +97,9 @@ public class UserServicesTest {
     public void userCreatesPost_numberOfUserPostsIsOneTest() {
         userServices.register(registerRequest);
         var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
-        System.out.println(foundUser);
         assertThat(foundUser.getPosts().size(), is(0));
         userServices.createPost(createPostRequest);
+        foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(1));
     }
 }
