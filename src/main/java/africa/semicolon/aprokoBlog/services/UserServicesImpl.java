@@ -33,13 +33,13 @@ public class UserServicesImpl implements UserServices {
     public LoginUserResponse login(LoginRequest loginRequest) {
         User foundUser = findUserBy(loginRequest.getUsername());
         if (!isMatches(loginRequest, foundUser)) throw new IncorrectPasswordException("Password is not correct");
-        return loginResponseMap(foundUser);
+        return mapLoginResponse(foundUser);
     }
 
     @Override
     public LogoutUserResponse logout(LogoutRequest logOutRequest) {
         User foundUser = findUserBy(logOutRequest.getUsername());
-        return logoutResponseMap(foundUser);
+        return mapLogoutResponse(foundUser);
     }
 
     @Override
@@ -48,7 +48,32 @@ public class UserServicesImpl implements UserServices {
         Post newPost = postServices.createPost(createPostRequest);
         foundUser.getPosts().add(newPost);
         users.save(foundUser);
-        return createPostResponseMap(newPost);
+        return mapCreatePostResponse(newPost);
+    }
+
+    @Override
+    public EditPostResponse editPost(EditPostRequest editPostRequest) {
+        User foundUser = findUserBy(editPostRequest.getUsername());
+        Post savedPost = findUserPostBy(editPostRequest.getId(), foundUser);
+        Post editedPost = postServices.editPost(editPostRequest);
+        foundUser.getPosts().remove(savedPost);
+        foundUser.getPosts().add(editedPost);
+        users.save(foundUser);
+        return mapEditPostResponse(editedPost);
+    }
+
+    @Override
+    public DeletePostResponse deletePost(DeletePostRequest deletePostRequest) {
+        User foundUser = findUserBy(deletePostRequest.getUsername());
+        Post savedPost = findUserPostBy(deletePostRequest.getId(), foundUser);
+        foundUser.getPosts().remove(savedPost);
+        users.save(foundUser);
+        return postServices.deletePost(deletePostRequest);
+    }
+
+    private Post findUserPostBy(String id, User user) {
+        for (Post post : user.getPosts()) if (post.getId().equals(id)) return post;
+        throw new PostNotFoundException("Post not found");
     }
 
     private User findUserBy(String username) {

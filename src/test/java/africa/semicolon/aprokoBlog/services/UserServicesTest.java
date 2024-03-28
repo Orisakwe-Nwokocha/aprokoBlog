@@ -20,6 +20,8 @@ public class UserServicesTest {
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
     private CreatePostRequest createPostRequest;
+    private EditPostRequest editPostRequest;
+    private DeletePostRequest deletePostRequest;
 
     @BeforeEach
     public void setUp() {
@@ -39,6 +41,14 @@ public class UserServicesTest {
         createPostRequest.setUsername("username");
         createPostRequest.setTitle("title");
         createPostRequest.setContent("content");
+
+        editPostRequest = new EditPostRequest();
+        editPostRequest.setUsername("username");
+        editPostRequest.setTitle("title");
+        editPostRequest.setContent("newContent");
+
+        deletePostRequest = new DeletePostRequest();
+        deletePostRequest.setUsername("username");
     }
 
     @Test
@@ -98,8 +108,43 @@ public class UserServicesTest {
         userServices.register(registerRequest);
         var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(0));
-        userServices.createPost(createPostRequest);
+        var createPostResponse = userServices.createPost(createPostRequest);
         foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(1));
+        assertThat(createPostResponse.getId(), notNullValue());
     }
+
+    @Test
+    public void userEditsCreatedPost_postContentIsNewContent() {
+        userServices.register(registerRequest);
+        userServices.createPost(createPostRequest);
+        var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        var savedPost = foundUser.getPosts().getFirst();
+        assertThat(foundUser.getPosts().size(), is(1));
+        assertThat(savedPost.getContent(), containsString("content"));
+
+        editPostRequest.setId(savedPost.getId());
+        var editPostResponse = userServices.editPost(editPostRequest);
+        foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        savedPost = foundUser.getPosts().getFirst();
+        assertThat(foundUser.getPosts().size(), is(1));
+        assertThat(savedPost.getContent(), containsString("newContent"));
+        assertThat(editPostResponse.getId(), notNullValue());
+    }
+
+    @Test
+    public void userDeletesCreatedPost_postContentIsNewContent() {
+        userServices.register(registerRequest);
+        userServices.createPost(createPostRequest);
+        var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        var savedPost = foundUser.getPosts().getFirst();
+        assertThat(foundUser.getPosts().size(), is(1));
+
+        deletePostRequest.setId(savedPost.getId());
+        var deletePostResponse = userServices.deletePost(deletePostRequest);
+        foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        assertThat(foundUser.getPosts().size(), is(0));
+        assertThat(deletePostResponse.getId(), notNullValue());
+    }
+
 }
