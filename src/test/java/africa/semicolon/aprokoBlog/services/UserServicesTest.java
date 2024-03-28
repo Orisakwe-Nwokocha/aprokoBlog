@@ -24,7 +24,7 @@ public class UserServicesTest {
     }
 
     @Test
-    public void registerUser_numberOfUsersIsOne() {
+    public void registerUser_numberOfUsersIsOneTest() {
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setFirstName("John");
         registerRequest.setLastName("Doe");
@@ -37,7 +37,7 @@ public class UserServicesTest {
     }
 
     @Test
-    public void registerSameUser_throwsUserExistsException() {
+    public void registerSameUser_throwsUserExistsExceptionTest() {
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setFirstName("John");
         registerRequest.setLastName("Doe");

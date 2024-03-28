@@ -21,10 +21,10 @@ public class UserServicesImpl implements UserServices {
         registerRequest.setUsername(cleanup(registerRequest.getUsername()));
         validate(registerRequest.getUsername());
         User newUser = map(registerRequest);
-        users.save(newUser);
-
-        return null;
+        User savedUser = users.save(newUser);
+        return map(savedUser);
     }
+
 
     private void validate(String username) {
         boolean userExists = users.existsByUsername(username);
