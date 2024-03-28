@@ -1,16 +1,10 @@
 package africa.semicolon.aprokoBlog.services;
 
-import africa.semicolon.aprokoBlog.data.models.User;
+import africa.semicolon.aprokoBlog.data.models.*;
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.LoginRequest;
-import africa.semicolon.aprokoBlog.dtos.requests.LogoutRequest;
-import africa.semicolon.aprokoBlog.dtos.requests.RegisterRequest;
-import africa.semicolon.aprokoBlog.dtos.responses.LoginUserResponse;
-import africa.semicolon.aprokoBlog.dtos.responses.LogoutUserResponse;
-import africa.semicolon.aprokoBlog.dtos.responses.RegisterUserResponse;
-import africa.semicolon.aprokoBlog.exceptions.IncorrectPasswordException;
-import africa.semicolon.aprokoBlog.exceptions.UserExistsException;
-import africa.semicolon.aprokoBlog.exceptions.UsernameNotFoundException;
+import africa.semicolon.aprokoBlog.dtos.requests.*;
+import africa.semicolon.aprokoBlog.dtos.responses.*;
+import africa.semicolon.aprokoBlog.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +16,15 @@ import static africa.semicolon.aprokoBlog.utils.Mapper.*;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private Users users;
+    @Autowired
+    private PostServices postServices;
 
     @Override
     public RegisterUserResponse register(RegisterRequest registerRequest) {
         registerRequest.setUsername(cleanup(registerRequest.getUsername()));
         validate(registerRequest.getUsername());
         registerRequest.setPassword(encode(registerRequest.getPassword()));
-        User newUser = registerResponseMap(registerRequest);
+        User newUser = map(registerRequest);
         User savedUser = users.save(newUser);
         return registerResponseMap(savedUser);
     }
@@ -44,6 +40,13 @@ public class UserServicesImpl implements UserServices {
     public LogoutUserResponse logout(LogoutRequest logOutRequest) {
         User foundUser = findUserBy(logOutRequest.getUsername());
         return logoutResponseMap(foundUser);
+    }
+
+    @Override
+    public CreatePostResponse createPost(CreatePostRequest createPostRequest) {
+        User foundUser = findUserBy(createPostRequest.getUsername());
+        Post newPost = postServices.createPost(createPostRequest);
+        return createPostResponseMap(newPost);
     }
 
     private User findUserBy(String username) {

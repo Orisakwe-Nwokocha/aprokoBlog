@@ -1,8 +1,7 @@
 package africa.semicolon.aprokoBlog.services;
 
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.LoginRequest;
-import africa.semicolon.aprokoBlog.dtos.requests.RegisterRequest;
+import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +19,7 @@ public class UserServicesTest {
     private Users users;
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
+    private CreatePostRequest createPostRequest;
 
     @BeforeEach
     public void setUp() {
@@ -34,13 +34,19 @@ public class UserServicesTest {
         loginRequest = new LoginRequest();
         loginRequest.setUsername("username");
         loginRequest.setPassword("password");
+
+        createPostRequest = new CreatePostRequest();
+        createPostRequest.setUsername("username");
+        createPostRequest.setTitle("title");
+        createPostRequest.setContent("content");
     }
 
     @Test
     public void registerUser_numberOfUsersIsOneTest() {
         assertThat(users.count(), is(0L));
-        userServices.register(registerRequest);
+        var registerResponse = userServices.register(registerRequest);
         assertThat(users.count(), is(1L));
+        assertThat(registerResponse.getId(), notNullValue());
     }
 
     @Test
@@ -85,5 +91,15 @@ public class UserServicesTest {
         catch (IncorrectPasswordException e) {
             assertThat(e.getMessage(), containsString("Password is not correct"));
         }
+    }
+
+    @Test
+    public void userCreatesPost_numberOfUserPostsIsOneTest() {
+        userServices.register(registerRequest);
+        var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        System.out.println(foundUser);
+        assertThat(foundUser.getPosts().size(), is(0));
+        userServices.createPost(createPostRequest);
+        assertThat(foundUser.getPosts().size(), is(1));
     }
 }

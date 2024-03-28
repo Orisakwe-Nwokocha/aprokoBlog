@@ -15,7 +15,7 @@ public class Post {
     private String id;
     private String title;
     private String content;
-    private LocalDateTime dateTimeCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
     @DBRef
     private List<Comment> comments;
     @DBRef
