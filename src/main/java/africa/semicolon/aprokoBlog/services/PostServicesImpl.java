@@ -1,8 +1,11 @@
 package africa.semicolon.aprokoBlog.services;
 
-import africa.semicolon.aprokoBlog.data.models.*;
+import africa.semicolon.aprokoBlog.data.models.Comment;
+import africa.semicolon.aprokoBlog.data.models.Post;
+import africa.semicolon.aprokoBlog.data.models.View;
 import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
+import africa.semicolon.aprokoBlog.dtos.responses.CommentResponse;
 import africa.semicolon.aprokoBlog.dtos.responses.DeletePostResponse;
 import africa.semicolon.aprokoBlog.dtos.responses.ViewPostResponse;
 import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
@@ -19,9 +22,11 @@ public class PostServicesImpl implements PostServices {
     @Autowired
     private Posts posts;
     @Autowired
-    private UserServices userServices;
+    private UserServiceFacade userServiceFacade;
     @Autowired
     private ViewServices viewServices;
+    @Autowired
+    private CommentServices commentServices;
 
     @Override
     public Post createPostWith(CreatePostRequest createPostRequest) {
@@ -47,13 +52,26 @@ public class PostServicesImpl implements PostServices {
         Post foundPost = findPostBy(viewPostRequest.getPostId());
         View newView = viewServices.addViewWith(viewPostRequest);
         foundPost.getViews().add(newView);
-        posts.save(foundPost);
-        User user = newView.getViewer();
-        user.getPosts().removeIf(post -> post.getId().equals(viewPostRequest.getPostId()));
-        user.getPosts().add(foundPost);
-        userServices.save(user);
-//        userServices.updatePostViews(new UpdatePostViewRequest(newView.getViewer(), foundPost));
+
+        Post updatedPost = posts.save(foundPost);
+        userServiceFacade.updateUserPostWith(new UpdatePostRequest(viewPostRequest.getPostAuthor(), updatedPost));
+
         return mapViewPostResponse(newView);
+    }
+
+    @Override
+    public CommentResponse addComment(CommentRequest commentRequest) {
+        Post foundPost = findPostBy(commentRequest.getPostId());
+        ViewPostRequest viewPostRequest = map(commentRequest);
+        View newView = viewServices.addViewWith(viewPostRequest);
+        Comment newComment = commentServices.addCommentWith(commentRequest);
+
+        foundPost.getViews().add(newView);
+        foundPost.getComments().add(newComment);
+        Post updatedPost = posts.save(foundPost);
+        userServiceFacade.updateUserPostWith(new UpdatePostRequest(commentRequest.getPostAuthor(), updatedPost));
+
+        return mapCommentResponse(newComment);
     }
 
     private Post findPostBy(String id) {

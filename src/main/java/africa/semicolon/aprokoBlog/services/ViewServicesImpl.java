@@ -14,11 +14,11 @@ public class ViewServicesImpl implements ViewServices {
     @Autowired
     private Views views;
     @Autowired
-    private UserServices userServices;
+    private UserServiceFacade userServiceFacade;
 
     @Override
     public View addViewWith(ViewPostRequest viewPostRequest) {
-        User viewer = userServices.findUserBy(viewPostRequest.getViewerUsername());
+        User viewer = userServiceFacade.findUserBy(viewPostRequest.getViewer());
         View newView = map(viewPostRequest, viewer);
         return views.save(newView);
     }

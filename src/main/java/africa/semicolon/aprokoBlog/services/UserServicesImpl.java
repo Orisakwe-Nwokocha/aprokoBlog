@@ -1,15 +1,20 @@
 package africa.semicolon.aprokoBlog.services;
 
-import africa.semicolon.aprokoBlog.data.models.*;
+import africa.semicolon.aprokoBlog.data.models.Post;
+import africa.semicolon.aprokoBlog.data.models.User;
 import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
-import africa.semicolon.aprokoBlog.exceptions.*;
+import africa.semicolon.aprokoBlog.exceptions.IncorrectPasswordException;
+import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
+import africa.semicolon.aprokoBlog.exceptions.UserExistsException;
+import africa.semicolon.aprokoBlog.exceptions.UsernameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static africa.semicolon.aprokoBlog.utils.Cleaner.cleanup;
-import static africa.semicolon.aprokoBlog.utils.Cryptography.*;
+import static africa.semicolon.aprokoBlog.utils.Cryptography.encode;
+import static africa.semicolon.aprokoBlog.utils.Cryptography.isMatches;
 import static africa.semicolon.aprokoBlog.utils.Mapper.*;
 
 @Service
@@ -71,28 +76,12 @@ public class UserServicesImpl implements UserServices {
         return postServices.deletePostWith(deletePostRequest);
     }
 
-    @Override
-    public void updatePostViews(UpdatePostViewRequest updatePostViewRequest) {
-        User user = updatePostViewRequest.getUser();
-        Post updatedPost = updatePostViewRequest.getPost();
-        Post oldPost = findUserPostBy(updatedPost.getId(), user);
-        user.getPosts().remove(oldPost);
-        user.getPosts().add(updatedPost);
-        users.save(user);
-    }
-
-    @Override
-    public void save(User user) {
-        users.save(user);
-    }
-
     private Post findUserPostBy(String id, User user) {
         for (Post post : user.getPosts()) if (post.getId().equals(id)) return post;
         throw new PostNotFoundException("Post not found");
     }
 
-    @Override
-    public User findUserBy(String username) {
+    private User findUserBy(String username) {
         username = cleanup(username);
         User foundUser = users.findByUsername(username);
         if (foundUser == null) throw new UsernameNotFoundException(String.format("%s not found", username));
@@ -103,6 +92,4 @@ public class UserServicesImpl implements UserServices {
         boolean userExists = users.existsByUsername(username);
         if (userExists) throw new UserExistsException(String.format("%s already exists", username));
     }
-
-
 }

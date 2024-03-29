@@ -115,7 +115,7 @@ public class UserServicesTest {
         var createPostResponse = userServices.createPost(createPostRequest);
         foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(1));
-        assertThat(createPostResponse.getId(), notNullValue());
+        assertThat(createPostResponse.getPostId(), notNullValue());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class UserServicesTest {
         savedPost = foundUser.getPosts().getFirst();
         assertThat(foundUser.getPosts().size(), is(1));
         assertThat(savedPost.getContent(), containsString("newContent"));
-        assertThat(editPostResponse.getId(), notNullValue());
+        assertThat(editPostResponse.getPostId(), notNullValue());
     }
 
     @Test
@@ -148,7 +148,6 @@ public class UserServicesTest {
         var deletePostResponse = userServices.deletePost(deletePostRequest);
         foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(0));
-        assertThat(deletePostResponse.getId(), notNullValue());
+        assertThat(deletePostResponse.getPostId(), notNullValue());
     }
-
 }
