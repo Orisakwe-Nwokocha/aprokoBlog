@@ -45,7 +45,7 @@ public class UserServicesImpl implements UserServices {
     @Override
     public CreatePostResponse createPost(CreatePostRequest createPostRequest) {
         User foundUser = findUserBy(createPostRequest.getUsername());
-        Post newPost = postServices.createPost(createPostRequest);
+        Post newPost = postServices.createPostWith(createPostRequest);
         foundUser.getPosts().add(newPost);
         users.save(foundUser);
         return mapCreatePostResponse(newPost);
@@ -54,8 +54,8 @@ public class UserServicesImpl implements UserServices {
     @Override
     public EditPostResponse editPost(EditPostRequest editPostRequest) {
         User foundUser = findUserBy(editPostRequest.getUsername());
-        Post savedPost = findUserPostBy(editPostRequest.getId(), foundUser);
-        Post editedPost = postServices.editPost(editPostRequest);
+        Post savedPost = findUserPostBy(editPostRequest.getPostId(), foundUser);
+        Post editedPost = postServices.editPostWith(editPostRequest);
         foundUser.getPosts().remove(savedPost);
         foundUser.getPosts().add(editedPost);
         users.save(foundUser);
@@ -68,7 +68,22 @@ public class UserServicesImpl implements UserServices {
         Post savedPost = findUserPostBy(deletePostRequest.getId(), foundUser);
         foundUser.getPosts().remove(savedPost);
         users.save(foundUser);
-        return postServices.deletePost(deletePostRequest);
+        return postServices.deletePostWith(deletePostRequest);
+    }
+
+    @Override
+    public void updatePostViews(UpdatePostViewRequest updatePostViewRequest) {
+        User user = updatePostViewRequest.getUser();
+        Post updatedPost = updatePostViewRequest.getPost();
+        Post oldPost = findUserPostBy(updatedPost.getId(), user);
+        user.getPosts().remove(oldPost);
+        user.getPosts().add(updatedPost);
+        users.save(user);
+    }
+
+    @Override
+    public void save(User user) {
+        users.save(user);
     }
 
     private Post findUserPostBy(String id, User user) {
@@ -76,7 +91,8 @@ public class UserServicesImpl implements UserServices {
         throw new PostNotFoundException("Post not found");
     }
 
-    private User findUserBy(String username) {
+    @Override
+    public User findUserBy(String username) {
         username = cleanup(username);
         User foundUser = users.findByUsername(username);
         if (foundUser == null) throw new UsernameNotFoundException(String.format("%s not found", username));

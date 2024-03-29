@@ -5,7 +5,7 @@ import africa.semicolon.aprokoBlog.dtos.requests.LoginRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class Cryptography {
+public final class Cryptography {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static String encode(String password) {

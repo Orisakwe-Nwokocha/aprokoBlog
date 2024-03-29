@@ -2,14 +2,13 @@ package africa.semicolon.aprokoBlog.utils;
 
 import africa.semicolon.aprokoBlog.data.models.Post;
 import africa.semicolon.aprokoBlog.data.models.User;
-import africa.semicolon.aprokoBlog.dtos.requests.CreatePostRequest;
-import africa.semicolon.aprokoBlog.dtos.requests.EditPostRequest;
-import africa.semicolon.aprokoBlog.dtos.requests.RegisterRequest;
+import africa.semicolon.aprokoBlog.data.models.View;
+import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
 
 import java.time.format.DateTimeFormatter;
 
-public class Mapper {
+public final class Mapper {
     public static User map(RegisterRequest registerRequest) {
         User user = new User();
         user.setFirstName(registerRequest.getFirstName());
@@ -60,7 +59,7 @@ public class Mapper {
 
     public static Post map(EditPostRequest editPostRequest) {
         Post post = new Post();
-        post.setId(editPostRequest.getId());
+        post.setId(editPostRequest.getPostId());
         post.setTitle(editPostRequest.getTitle());
         post.setContent(editPostRequest.getContent());
         return post;
@@ -81,4 +80,21 @@ public class Mapper {
         deletePostResponse.setId(post.getId());
         return deletePostResponse;
     }
+
+    public static View map(ViewPostRequest viewPostRequest, User viewer) {
+        View view = new View();
+        view.setViewer(viewer);
+        return view;
+    }
+
+    public static ViewPostResponse mapViewPostResponse(View view) {
+        ViewPostResponse viewPostResponse = new ViewPostResponse();
+        viewPostResponse.setId(view.getId());
+        viewPostResponse.setViewerId(view.getViewer().getId());
+        viewPostResponse.setViewerUsername(view.getViewer().getUsername());
+        viewPostResponse.setTimeOfView(DateTimeFormatter
+                .ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(view.getTimeOfView()));
+        return viewPostResponse;
+    }
+
 }
