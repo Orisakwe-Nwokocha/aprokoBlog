@@ -61,10 +61,10 @@ public class UserControllers {
         }
     }
 
-    @PutMapping("/edit-post")
-    public ResponseEntity<?> editPost(@RequestBody EditPostRequest editPostRequest) {
+    @PatchMapping("/view-post")
+    public ResponseEntity<?> getPost(@RequestBody ViewPostRequest viewPostRequest) {
         try {
-            var result = userServices.editPost(editPostRequest);
+            var result = userServices.viewPost(viewPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
         }
         catch (AprokoBlogAppException e) {
@@ -72,16 +72,17 @@ public class UserControllers {
         }
     }
 
-    @DeleteMapping("/delete-post")
-    public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest) {
+    @PatchMapping("/comment")
+    public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest) {
         try {
-            var result = userServices.deletePost(deletePostRequest);
+            var result = userServices.reactToPost(commentRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
         }
         catch (AprokoBlogAppException e) {
             return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
         }
     }
+
     @GetMapping("/view-posts")
     public ResponseEntity<?> getUserPosts(@RequestBody GetUserPostsRequest getUserPostsRequest) {
         try {

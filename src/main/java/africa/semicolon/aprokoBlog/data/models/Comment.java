@@ -13,4 +13,11 @@ public class Comment {
     @DBRef
     private User commenter;
     private String comment;
+
+    @Override
+    public String toString() {
+        return String.format("id='%s', comment='%s'",
+                id, comment);
+    }
+
 }

@@ -13,11 +13,9 @@ import static africa.semicolon.aprokoBlog.utils.Mapper.map;
 public class CommentServicesImpl implements CommentServices {
     @Autowired
     private Comments comments;
-    @Autowired
-    private UserServiceFacade userServiceFacade;
+
     @Override
-    public Comment addCommentWith(CommentRequest commentRequest) {
-        User commenter = userServiceFacade.findUserBy(commentRequest.getCommenter());
+    public Comment addCommentWith(CommentRequest commentRequest, User commenter) {
         Comment newComment = map(commentRequest, commenter);
         return comments.save(newComment);
     }

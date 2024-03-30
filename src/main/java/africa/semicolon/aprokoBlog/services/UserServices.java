@@ -8,7 +8,7 @@ public interface UserServices {
     LoginUserResponse login(LoginRequest loginRequest);
     LogoutUserResponse logout(LogoutRequest logOutRequest);
     CreatePostResponse createPost(CreatePostRequest createPostRequest);
-    EditPostResponse editPost(EditPostRequest editPostRequest);
-    DeletePostResponse deletePost(DeletePostRequest deletePostRequest);
+    ViewPostResponse viewPost(ViewPostRequest viewPostRequest);
+    CommentResponse reactToPost(CommentRequest commentRequest);
     GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest);
 }

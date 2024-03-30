@@ -2,12 +2,11 @@ package africa.semicolon.aprokoBlog.services;
 
 import africa.semicolon.aprokoBlog.data.models.Comment;
 import africa.semicolon.aprokoBlog.data.models.Post;
+import africa.semicolon.aprokoBlog.data.models.User;
 import africa.semicolon.aprokoBlog.data.models.View;
 import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.CommentResponse;
-import africa.semicolon.aprokoBlog.dtos.responses.DeletePostResponse;
-import africa.semicolon.aprokoBlog.dtos.responses.ViewPostResponse;
+import africa.semicolon.aprokoBlog.dtos.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,6 @@ public class PostServicesImpl implements PostServices {
     @Autowired
     private Posts posts;
     @Autowired
-    private UserServiceFacade userServiceFacade;
-    @Autowired
     private ViewServices viewServices;
     @Autowired
     private CommentServices commentServices;
@@ -35,44 +32,45 @@ public class PostServicesImpl implements PostServices {
     }
 
     @Override
-    public Post editPostWith(EditPostRequest editPostRequest) {
+    public EditPostResponse editPostWith(EditPostRequest editPostRequest) {
         Post oldPost = findPostBy(editPostRequest.getPostId());
         Post editedPost = map(editPostRequest, oldPost);
-        return posts.save(editedPost);
+        posts.save(editedPost);
+        return mapEditPostResponseWith(editedPost);
     }
 
     @Override
     public DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest) {
         Post foundPost = findPostBy(deletePostRequest.getId());
         posts.delete(foundPost);
-        return mapDeletePostResponse(foundPost);
+        return mapDeletePostResponseWith(foundPost);
     }
 
     @Override
-    public ViewPostResponse viewPost(ViewPostRequest viewPostRequest) {
-        Post foundPost = findPostBy(viewPostRequest.getPostId());
-        View newView = viewServices.addViewWith(viewPostRequest);
-        foundPost.getViews().add(newView);
-
-        Post updatedPost = posts.save(foundPost);
-        userServiceFacade.updateUserPostWith(new UpdatePostRequest(viewPostRequest.getPostAuthor(), updatedPost));
-
-        return mapViewPostResponse(newView, updatedPost);
+    public ViewPostResponse addViewWith(ViewPostRequest viewPostRequest, User viewer) {
+        Post post = findPostBy(viewPostRequest.getPostId());
+        View newView = viewServices.saveViewOf(viewer);
+        post.getViews().add(newView);
+        posts.save(post);
+        return mapViewPostResponseWith(newView);
     }
 
     @Override
-    public CommentResponse addComment(CommentRequest commentRequest) {
-        Post foundPost = findPostBy(commentRequest.getPostId());
-        ViewPostRequest viewPostRequest = map(commentRequest);
-        View newView = viewServices.addViewWith(viewPostRequest);
-        Comment newComment = commentServices.addCommentWith(commentRequest);
-
-        foundPost.getViews().add(newView);
-        foundPost.getComments().add(newComment);
-        Post updatedPost = posts.save(foundPost);
-        userServiceFacade.updateUserPostWith(new UpdatePostRequest(commentRequest.getPostAuthor(), updatedPost));
-
+    public CommentResponse addCommentWith(CommentRequest commentRequest, User commenter) {
+        Post post = findPostBy(commentRequest.getPostId());
+        View newView = viewServices.saveViewOf(commenter);
+        Comment newComment = commentServices.addCommentWith(commentRequest, commenter);
+        post.getViews().add(newView);
+        post.getComments().add(newComment);
+        posts.save(post);
         return mapCommentResponse(newComment);
+    }
+
+    @Override
+    public ViewsCountResponse getNumberOfViews(ViewsCountRequest viewsCountRequest) {
+        Post foundPost = findPostBy(viewsCountRequest.getPostId());
+        Long viewsCount = (long) foundPost.getViews().size();
+        return map(viewsCount, viewsCountRequest.getPostId());
     }
 
     private Post findPostBy(String id) {

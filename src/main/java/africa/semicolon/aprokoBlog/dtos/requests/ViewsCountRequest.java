@@ -3,7 +3,6 @@ package africa.semicolon.aprokoBlog.dtos.requests;
 import lombok.Data;
 
 @Data
-public class ViewPostRequest {
-    private String viewer;
+public class ViewsCountRequest {
     private String postId;
 }

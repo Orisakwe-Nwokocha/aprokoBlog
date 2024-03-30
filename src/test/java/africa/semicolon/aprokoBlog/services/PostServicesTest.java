@@ -62,7 +62,7 @@ public class PostServicesTest {
         viewPostRequest.setPostAuthor(postAuthor);
         viewPostRequest.setPostId(createPostResponse.getPostId());
 
-        var viewPostResponse = postServices.viewPost(viewPostRequest);
+        var viewPostResponse = postServices.addViewWith(viewPostRequest, foundUser);
         assertThat(posts.count(), is(1L));
         assertThat(posts.findAll().getFirst().getViews(), hasSize(1));
         foundUser = users.findByUsername(postAuthor);
@@ -87,7 +87,7 @@ public class PostServicesTest {
         commentRequest.setPostId(createPostResponse.getPostId());
         commentRequest.setComment("comment");
 
-        var commentResponse = postServices.addComment(commentRequest);
+        var commentResponse = postServices.addCommentWith(commentRequest, commenter);
         assertThat(posts.count(), is(1L));
         assertThat(posts.findAll().getFirst().getViews(), hasSize(1));
         assertThat(posts.findAll().getFirst().getComments(), hasSize(1));

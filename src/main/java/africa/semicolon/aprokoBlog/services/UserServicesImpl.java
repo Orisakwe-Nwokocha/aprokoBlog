@@ -6,7 +6,6 @@ import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.IncorrectPasswordException;
-import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
 import africa.semicolon.aprokoBlog.exceptions.UserExistsException;
 import africa.semicolon.aprokoBlog.exceptions.UsernameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,34 +56,21 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public EditPostResponse editPost(EditPostRequest editPostRequest) {
-        User foundUser = findUserBy(editPostRequest.getUsername());
-        Post savedPost = findUserPostBy(editPostRequest.getPostId(), foundUser);
-        Post editedPost = postServices.editPostWith(editPostRequest);
-        foundUser.getPosts().remove(savedPost);
-        foundUser.getPosts().add(editedPost);
-        users.save(foundUser);
-        return mapEditPostResponse(editedPost);
+    public ViewPostResponse viewPost(ViewPostRequest viewPostRequest) {
+        User viewer = findUserBy(viewPostRequest.getViewer());
+        return postServices.addViewWith(viewPostRequest, viewer);
     }
 
     @Override
-    public DeletePostResponse deletePost(DeletePostRequest deletePostRequest) {
-        User foundUser = findUserBy(deletePostRequest.getUsername());
-        Post savedPost = findUserPostBy(deletePostRequest.getId(), foundUser);
-        foundUser.getPosts().remove(savedPost);
-        users.save(foundUser);
-        return postServices.deletePostWith(deletePostRequest);
+    public CommentResponse reactToPost(CommentRequest commentRequest) {
+        User commenter = findUserBy(commentRequest.getCommenter());
+        return postServices.addCommentWith(commentRequest, commenter);
     }
 
     @Override
     public GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest) {
         User foundUser = findUserBy(getUserPostsRequest.getUsername());
         return mapGetUserPostsResponse(foundUser);
-    }
-
-    private Post findUserPostBy(String id, User user) {
-        for (Post post : user.getPosts()) if (post.getId().equals(id)) return post;
-        throw new PostNotFoundException("Post not found");
     }
 
     private User findUserBy(String username) {

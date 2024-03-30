@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ViewPostResponse {
-    private Post post;
     private String viewerId;
     private String viewer;
     private String timeOfView;

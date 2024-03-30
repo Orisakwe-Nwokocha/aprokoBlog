@@ -3,6 +3,7 @@ package africa.semicolon.aprokoBlog.utils;
 import africa.semicolon.aprokoBlog.data.models.*;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
+import africa.semicolon.aprokoBlog.dtos.responses.ViewsCountResponse;
 
 import java.time.format.DateTimeFormatter;
 
@@ -55,16 +56,13 @@ public final class Mapper {
         return createPostResponse;
     }
 
-    public static Post map(EditPostRequest editPostRequest, Post oldPost) {
-        Post post = new Post();
-        post.setId(editPostRequest.getPostId());
+    public static Post map(EditPostRequest editPostRequest, Post post) {
         post.setTitle(editPostRequest.getTitle());
         post.setContent(editPostRequest.getContent());
-        post.setDateCreated(oldPost.getDateCreated());
         return post;
     }
 
-    public static EditPostResponse mapEditPostResponse(Post post) {
+    public static EditPostResponse mapEditPostResponseWith(Post post) {
         EditPostResponse editPostResponse = new EditPostResponse();
         editPostResponse.setPostId(post.getId());
         editPostResponse.setTitle(post.getTitle());
@@ -74,7 +72,7 @@ public final class Mapper {
         return editPostResponse;
     }
 
-    public static DeletePostResponse mapDeletePostResponse(Post post) {
+    public static DeletePostResponse mapDeletePostResponseWith(Post post) {
         DeletePostResponse deletePostResponse = new DeletePostResponse();
         deletePostResponse.setPostId(post.getId());
         return deletePostResponse;
@@ -86,22 +84,13 @@ public final class Mapper {
         return view;
     }
 
-    public static ViewPostResponse mapViewPostResponse(View view, Post post) {
+    public static ViewPostResponse mapViewPostResponseWith(View view) {
         ViewPostResponse viewPostResponse = new ViewPostResponse();
-        viewPostResponse.setPost(post);
         viewPostResponse.setViewerId(view.getViewer().getId());
         viewPostResponse.setViewer(view.getViewer().getUsername());
         viewPostResponse.setTimeOfView(DateTimeFormatter
                 .ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(view.getTimeOfView()));
         return viewPostResponse;
-    }
-
-    public static ViewPostRequest map(CommentRequest commentRequest) {
-        ViewPostRequest viewPostRequest = new ViewPostRequest();
-        viewPostRequest.setPostAuthor(commentRequest.getPostAuthor());
-        viewPostRequest.setPostId(commentRequest.getPostId());
-        viewPostRequest.setViewer(commentRequest.getCommenter());
-        return viewPostRequest;
     }
 
     public static Comment map(CommentRequest commentRequest, User commenter) {
@@ -124,5 +113,12 @@ public final class Mapper {
         getUserPostsResponse.setUsername(user.getUsername());
         getUserPostsResponse.setUserPosts(user.getPosts());
         return getUserPostsResponse;
+    }
+
+    public static ViewsCountResponse map(Long viewsCount, String postId) {
+        ViewsCountResponse viewsCountResponse = new ViewsCountResponse();
+        viewsCountResponse.setViewsCount(viewsCount);
+        viewsCountResponse.setPostId(postId);
+        return viewsCountResponse;
     }
 }

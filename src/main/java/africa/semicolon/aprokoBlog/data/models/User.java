@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,4 +22,12 @@ public class User {
     private LocalDateTime dateRegistered = LocalDateTime.now();
     @DBRef
     private List<Post> posts = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        String registrationDate = DateTimeFormatter.ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(dateRegistered);
+        return String.format("id='%s', firstName='%s', lastName='%s', username='%s', dateRegistered='%s'",
+                id, firstName, lastName, username, registrationDate);
+    }
+
 }
