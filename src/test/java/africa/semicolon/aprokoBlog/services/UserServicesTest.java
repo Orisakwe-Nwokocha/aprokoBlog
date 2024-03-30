@@ -1,6 +1,5 @@
 package africa.semicolon.aprokoBlog.services;
 
-import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.exceptions.*;
@@ -18,14 +17,11 @@ public class UserServicesTest {
     private UserServices userServices;
     @Autowired
     private Users users;
-    @Autowired
-    private Posts posts;
     private RegisterRequest registerRequest;
     private LoginRequest loginRequest;
     private CreatePostRequest createPostRequest;
     private EditPostRequest editPostRequest;
     private DeletePostRequest deletePostRequest;
-    private ViewPostRequest viewPostRequest;
 
     @BeforeEach
     public void setUp() {
@@ -149,5 +145,18 @@ public class UserServicesTest {
         foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         assertThat(foundUser.getPosts().size(), is(0));
         assertThat(deletePostResponse.getPostId(), notNullValue());
+    }
+
+    @Test
+    public void testGetUserPosts() {
+        userServices.register(registerRequest);
+        userServices.createPost(createPostRequest);
+        userServices.createPost(createPostRequest);
+        GetUserPostsRequest getUserPostsRequest = new GetUserPostsRequest();
+        getUserPostsRequest.setUsername("username");
+
+        var getUserPostResponse = userServices.getUserPosts(getUserPostsRequest);
+        assertThat(getUserPostResponse.getUserPosts().size(), is(2));
+        assertThat(getUserPostResponse.getUserId(), notNullValue());
     }
 }

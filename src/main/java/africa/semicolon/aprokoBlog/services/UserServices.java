@@ -10,4 +10,5 @@ public interface UserServices {
     CreatePostResponse createPost(CreatePostRequest createPostRequest);
     EditPostResponse editPost(EditPostRequest editPostRequest);
     DeletePostResponse deletePost(DeletePostRequest deletePostRequest);
+    GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest);
 }

@@ -76,6 +76,12 @@ public class UserServicesImpl implements UserServices {
         return postServices.deletePostWith(deletePostRequest);
     }
 
+    @Override
+    public GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest) {
+        User foundUser = findUserBy(getUserPostsRequest.getUsername());
+        return mapGetUserPostsResponse(foundUser);
+    }
+
     private Post findUserPostBy(String id, User user) {
         for (Post post : user.getPosts()) if (post.getId().equals(id)) return post;
         throw new PostNotFoundException("Post not found");

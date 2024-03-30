@@ -36,7 +36,8 @@ public class PostServicesImpl implements PostServices {
 
     @Override
     public Post editPostWith(EditPostRequest editPostRequest) {
-        Post editedPost = map(editPostRequest);
+        Post oldPost = findPostBy(editPostRequest.getPostId());
+        Post editedPost = map(editPostRequest, oldPost);
         return posts.save(editedPost);
     }
 
@@ -56,7 +57,7 @@ public class PostServicesImpl implements PostServices {
         Post updatedPost = posts.save(foundPost);
         userServiceFacade.updateUserPostWith(new UpdatePostRequest(viewPostRequest.getPostAuthor(), updatedPost));
 
-        return mapViewPostResponse(newView);
+        return mapViewPostResponse(newView, updatedPost);
     }
 
     @Override

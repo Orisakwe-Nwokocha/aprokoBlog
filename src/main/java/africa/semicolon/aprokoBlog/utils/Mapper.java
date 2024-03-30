@@ -55,11 +55,12 @@ public final class Mapper {
         return createPostResponse;
     }
 
-    public static Post map(EditPostRequest editPostRequest) {
+    public static Post map(EditPostRequest editPostRequest, Post oldPost) {
         Post post = new Post();
         post.setId(editPostRequest.getPostId());
         post.setTitle(editPostRequest.getTitle());
         post.setContent(editPostRequest.getContent());
+        post.setDateCreated(oldPost.getDateCreated());
         return post;
     }
 
@@ -79,14 +80,15 @@ public final class Mapper {
         return deletePostResponse;
     }
 
-    public static View map(ViewPostRequest viewPostRequest, User viewer) {
+    public static View map(User viewer) {
         View view = new View();
         view.setViewer(viewer);
         return view;
     }
 
-    public static ViewPostResponse mapViewPostResponse(View view) {
+    public static ViewPostResponse mapViewPostResponse(View view, Post post) {
         ViewPostResponse viewPostResponse = new ViewPostResponse();
+        viewPostResponse.setPost(post);
         viewPostResponse.setViewerId(view.getViewer().getId());
         viewPostResponse.setViewer(view.getViewer().getUsername());
         viewPostResponse.setTimeOfView(DateTimeFormatter
@@ -114,5 +116,13 @@ public final class Mapper {
         commentResponse.setCommenterId(comment.getCommenter().getId());
         commentResponse.setCommenter(comment.getCommenter().getUsername());
         return commentResponse;
+    }
+
+    public static GetUserPostsResponse mapGetUserPostsResponse(User user) {
+        GetUserPostsResponse getUserPostsResponse = new GetUserPostsResponse();
+        getUserPostsResponse.setUserId(user.getId());
+        getUserPostsResponse.setUsername(user.getUsername());
+        getUserPostsResponse.setUserPosts(user.getPosts());
+        return getUserPostsResponse;
     }
 }

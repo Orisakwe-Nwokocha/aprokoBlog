@@ -19,7 +19,7 @@ public class ViewServicesImpl implements ViewServices {
     @Override
     public View addViewWith(ViewPostRequest viewPostRequest) {
         User viewer = userServiceFacade.findUserBy(viewPostRequest.getViewer());
-        View newView = map(viewPostRequest, viewer);
+        View newView = map(viewer);
         return views.save(newView);
     }
 }
