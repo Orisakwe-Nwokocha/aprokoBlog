@@ -29,6 +29,7 @@ public final class Mapper {
         LoginUserResponse loginUserResponse = new LoginUserResponse();
         loginUserResponse.setId(user.getId());
         loginUserResponse.setUsername(user.getUsername());
+        loginUserResponse.setLoggedIn(true);
         return loginUserResponse;
     }
 
@@ -36,6 +37,7 @@ public final class Mapper {
         LogoutUserResponse logoutUserResponse = new LogoutUserResponse();
         logoutUserResponse.setId(user.getId());
         logoutUserResponse.setUsername(user.getUsername());
+        logoutUserResponse.setLoggedIn(false);
         return logoutUserResponse;
     }
 

@@ -19,6 +19,7 @@ public class User {
     private String lastName;
     private String username;
     private String password;
+    private boolean isLoggedIn = true;
     private LocalDateTime dateRegistered = LocalDateTime.now();
     @DBRef
     private List<Post> posts = new ArrayList<>();
@@ -31,7 +32,8 @@ public class User {
                 firstName='%s'
                 lastName='%s'
                 username='%s'
-                dateRegistered='%s'""", id, firstName, lastName, username, registrationDate);
+                login status='%s'
+                dateRegistered='%s'""", id, firstName, lastName, username, isLoggedIn, registrationDate);
     }
 
 }
