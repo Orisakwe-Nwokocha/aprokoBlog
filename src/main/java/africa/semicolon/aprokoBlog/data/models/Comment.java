@@ -16,8 +16,9 @@ public class Comment {
 
     @Override
     public String toString() {
-        return String.format("id='%s', comment='%s'",
-                id, comment);
+        return String.format("""
+                id='%s'
+                comment='%s'""", id, comment);
     }
 
 }

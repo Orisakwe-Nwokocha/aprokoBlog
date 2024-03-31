@@ -26,8 +26,12 @@ public class User {
     @Override
     public String toString() {
         String registrationDate = DateTimeFormatter.ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(dateRegistered);
-        return String.format("id='%s', firstName='%s', lastName='%s', username='%s', dateRegistered='%s'",
-                id, firstName, lastName, username, registrationDate);
+        return String.format("""
+                id='%s'
+                firstName='%s'
+                lastName='%s'
+                username='%s'
+                dateRegistered='%s'""", id, firstName, lastName, username, registrationDate);
     }
 
 }

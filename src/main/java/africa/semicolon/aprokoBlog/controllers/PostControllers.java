@@ -16,28 +16,6 @@ public class PostControllers {
     @Autowired
     private PostServices postServices;
 
-    @PutMapping("/edit-post")
-    public ResponseEntity<?> editPost(@RequestBody EditPostRequest editPostRequest) {
-        try {
-            var result = postServices.editPostWith(editPostRequest);
-            return new ResponseEntity<>(new ApiResponse(true, result), OK);
-        }
-        catch (AprokoBlogAppException e) {
-            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
-        }
-    }
-
-    @DeleteMapping("/delete-post")
-    public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest) {
-        try {
-            var result = postServices.deletePostWith(deletePostRequest);
-            return new ResponseEntity<>(new ApiResponse(true, result), OK);
-        }
-        catch (AprokoBlogAppException e) {
-            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
-        }
-    }
-
     @GetMapping("/number-of-views")
     public ResponseEntity<?> getViewsCount(@RequestBody ViewsCountRequest viewsCountRequest) {
         try {

@@ -6,6 +6,7 @@ import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.IncorrectPasswordException;
+import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
 import africa.semicolon.aprokoBlog.exceptions.UserExistsException;
 import africa.semicolon.aprokoBlog.exceptions.UsernameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +31,20 @@ public class UserServicesImpl implements UserServices {
         registerRequest.setPassword(encode(registerRequest.getPassword()));
         User newUser = map(registerRequest);
         User savedUser = users.save(newUser);
-        return registerResponseMap(savedUser);
+        return mapRegisterResponseWith(savedUser);
     }
 
     @Override
     public LoginUserResponse login(LoginRequest loginRequest) {
         User foundUser = findUserBy(loginRequest.getUsername());
         if (!isMatches(loginRequest, foundUser)) throw new IncorrectPasswordException("Password is not correct");
-        return mapLoginResponse(foundUser);
+        return mapLoginResponseWith(foundUser);
     }
 
     @Override
     public LogoutUserResponse logout(LogoutRequest logOutRequest) {
         User foundUser = findUserBy(logOutRequest.getUsername());
-        return mapLogoutResponse(foundUser);
+        return mapLogoutResponseWith(foundUser);
     }
 
     @Override
@@ -52,7 +53,21 @@ public class UserServicesImpl implements UserServices {
         Post newPost = postServices.createPostWith(createPostRequest);
         foundUser.getPosts().add(newPost);
         users.save(foundUser);
-        return mapCreatePostResponse(newPost);
+        return mapCreatePostResponseWith(newPost);
+    }
+
+    @Override
+    public EditPostResponse editPostWith(EditPostRequest editPostRequest) {
+        User author = findUserBy(editPostRequest.getAuthor());
+        Post authorPost = findUserPostBy(editPostRequest.getPostId(), author);
+        return postServices.editPostWith(editPostRequest, authorPost);
+    }
+
+    @Override
+    public DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest) {
+        User author = findUserBy(deletePostRequest.getAuthor());
+        Post authorPost = findUserPostBy(deletePostRequest.getPostId(), author);
+        return postServices.deletePostWith(deletePostRequest, authorPost);
     }
 
     @Override
@@ -71,6 +86,11 @@ public class UserServicesImpl implements UserServices {
     public GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest) {
         User foundUser = findUserBy(getUserPostsRequest.getUsername());
         return mapGetUserPostsResponse(foundUser);
+    }
+
+    private Post findUserPostBy(String postId, User author) {
+        for (Post post : author.getPosts()) if (post.getId().equals(postId)) return post;
+        throw new PostNotFoundException("Post not found");
     }
 
     private User findUserBy(String username) {

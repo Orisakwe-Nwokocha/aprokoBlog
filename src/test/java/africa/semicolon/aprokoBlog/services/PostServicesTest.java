@@ -51,24 +51,28 @@ public class PostServicesTest {
         userServices.register(registerRequest);
         var createPostResponse = userServices.createPost(createPostRequest);
         assertThat(posts.count(), is(1L));
-        assertThat(posts.findAll().getFirst().getViews(), hasSize(0));
+
+        ViewsCountRequest viewsCountRequest = new ViewsCountRequest();
+        viewsCountRequest.setPostId(createPostResponse.getPostId());
+        var viewsCountResponse = postServices.getNumberOfViews(viewsCountRequest);
+        assertThat(viewsCountResponse.getViewsCount(), is(0L));
         String postAuthor = registerRequest.getUsername().toLowerCase();
         var foundUser = users.findByUsername(postAuthor);
         assertThat(foundUser.getPosts().getFirst().getViews(), hasSize(0));
 
         registerRequest.setUsername("username2");
         userServices.register(registerRequest);
+        var viewer = users.findByUsername(registerRequest.getUsername().toLowerCase());
         viewPostRequest.setViewer(registerRequest.getUsername());
-        viewPostRequest.setPostAuthor(postAuthor);
         viewPostRequest.setPostId(createPostResponse.getPostId());
 
-        var viewPostResponse = postServices.addViewWith(viewPostRequest, foundUser);
+        var viewPostResponse = postServices.addViewWith(viewPostRequest, viewer);
         assertThat(posts.count(), is(1L));
-        assertThat(posts.findAll().getFirst().getViews(), hasSize(1));
+        viewsCountResponse = postServices.getNumberOfViews(viewsCountRequest);
+        assertThat(viewsCountResponse.getViewsCount(), is(1L));
         foundUser = users.findByUsername(postAuthor);
         assertThat(foundUser.getPosts().getFirst().getViews(), hasSize(1));
         assertThat(viewPostResponse.getViewerId(), notNullValue());
-
     }
     @Test
     public void userCommentsOnCreatedPost_numberOfPostCommentsIs1Test() {
@@ -82,8 +86,8 @@ public class PostServicesTest {
 
         registerRequest.setUsername("username2");
         userServices.register(registerRequest);
+        var commenter = users.findByUsername(registerRequest.getUsername().toLowerCase());
         commentRequest.setCommenter(registerRequest.getUsername());
-        commentRequest.setPostAuthor(postAuthor);
         commentRequest.setPostId(createPostResponse.getPostId());
         commentRequest.setComment("comment");
 
@@ -95,7 +99,6 @@ public class PostServicesTest {
         assertThat(foundUser.getPosts().getFirst().getViews(), hasSize(1));
         assertThat(foundUser.getPosts().getFirst().getComments(), hasSize(1));
         assertThat(commentResponse.getCommenterId(), notNullValue());
-
     }
 
 }

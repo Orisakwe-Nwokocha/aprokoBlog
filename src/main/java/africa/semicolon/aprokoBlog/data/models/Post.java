@@ -26,7 +26,12 @@ public class Post {
     @Override
     public String toString() {
         String createdAt = DateTimeFormatter.ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(dateCreated);
-        return String.format("id='%s', title='%s', content='%s', dateCreated='%s', comments=%s, views=%s",
-                id, title, content, createdAt, comments, views);
+        return String.format("""
+                        id='%s'
+                        title='%s'
+                        content='%s'
+                        dateCreated='%s'
+                        comments=%s
+                        views=%s""", id, title, content, createdAt, comments, views);
     }
 }

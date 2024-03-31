@@ -61,8 +61,30 @@ public class UserControllers {
         }
     }
 
+    @PutMapping("/edit-post")
+    public ResponseEntity<?> editPost(@RequestBody EditPostRequest editPostRequest) {
+        try {
+            var result = userServices.editPostWith(editPostRequest);
+            return new ResponseEntity<>(new ApiResponse(true, result), OK);
+        }
+        catch (AprokoBlogAppException e) {
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete-post")
+    public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest) {
+        try {
+            var result = userServices.deletePostWith(deletePostRequest);
+            return new ResponseEntity<>(new ApiResponse(true, result), OK);
+        }
+        catch (AprokoBlogAppException e) {
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+    }
+
     @PatchMapping("/view-post")
-    public ResponseEntity<?> getPost(@RequestBody ViewPostRequest viewPostRequest) {
+    public ResponseEntity<?> viewPost(@RequestBody ViewPostRequest viewPostRequest) {
         try {
             var result = userServices.viewPost(viewPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);

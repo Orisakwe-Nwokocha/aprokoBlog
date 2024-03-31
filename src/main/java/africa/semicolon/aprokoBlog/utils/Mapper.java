@@ -16,7 +16,7 @@ public final class Mapper {
         user.setUsername(registerRequest.getUsername());
         return user;
     }
-    public static RegisterUserResponse registerResponseMap(User user) {
+    public static RegisterUserResponse mapRegisterResponseWith(User user) {
         RegisterUserResponse registerUserResponse = new RegisterUserResponse();
         registerUserResponse.setId(user.getId());
         registerUserResponse.setUsername(user.getUsername());
@@ -25,14 +25,14 @@ public final class Mapper {
         return registerUserResponse;
     }
 
-    public static LoginUserResponse mapLoginResponse(User user) {
+    public static LoginUserResponse mapLoginResponseWith(User user) {
         LoginUserResponse loginUserResponse = new LoginUserResponse();
         loginUserResponse.setId(user.getId());
         loginUserResponse.setUsername(user.getUsername());
         return loginUserResponse;
     }
 
-    public static LogoutUserResponse mapLogoutResponse(User user) {
+    public static LogoutUserResponse mapLogoutResponseWith(User user) {
         LogoutUserResponse logoutUserResponse = new LogoutUserResponse();
         logoutUserResponse.setId(user.getId());
         logoutUserResponse.setUsername(user.getUsername());
@@ -46,7 +46,7 @@ public final class Mapper {
         return post;
     }
 
-    public static CreatePostResponse mapCreatePostResponse(Post post) {
+    public static CreatePostResponse mapCreatePostResponseWith(Post post) {
         CreatePostResponse createPostResponse = new CreatePostResponse();
         createPostResponse.setPostId(post.getId());
         createPostResponse.setTitle(post.getTitle());
@@ -111,7 +111,7 @@ public final class Mapper {
         GetUserPostsResponse getUserPostsResponse = new GetUserPostsResponse();
         getUserPostsResponse.setUserId(user.getId());
         getUserPostsResponse.setUsername(user.getUsername());
-        getUserPostsResponse.setUserPosts(user.getPosts());
+        getUserPostsResponse.setUserPosts(user.getPosts().toString());
         return getUserPostsResponse;
     }
 

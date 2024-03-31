@@ -32,18 +32,16 @@ public class PostServicesImpl implements PostServices {
     }
 
     @Override
-    public EditPostResponse editPostWith(EditPostRequest editPostRequest) {
-        Post oldPost = findPostBy(editPostRequest.getPostId());
-        Post editedPost = map(editPostRequest, oldPost);
+    public EditPostResponse editPostWith(EditPostRequest editPostRequest, Post authorPost) {
+        Post editedPost = map(editPostRequest, authorPost);
         posts.save(editedPost);
         return mapEditPostResponseWith(editedPost);
     }
 
     @Override
-    public DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest) {
-        Post foundPost = findPostBy(deletePostRequest.getId());
-        posts.delete(foundPost);
-        return mapDeletePostResponseWith(foundPost);
+    public DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest, Post authorPost) {
+        posts.delete(authorPost);
+        return mapDeletePostResponseWith(authorPost);
     }
 
     @Override

@@ -20,8 +20,9 @@ public class View {
     @Override
     public String toString() {
         String viewedTime = DateTimeFormatter.ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(timeOfView);
-        return String.format("id='%s', timeOfView='%s'",
-                id, viewedTime);
+        return String.format("""
+                id='%s'
+                timeOfView='%s'""", id, viewedTime);
     }
 
 }

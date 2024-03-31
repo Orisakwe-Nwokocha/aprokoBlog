@@ -7,8 +7,8 @@ import africa.semicolon.aprokoBlog.dtos.responses.*;
 
 public interface PostServices {
     Post createPostWith(CreatePostRequest createPostRequest);
-    EditPostResponse editPostWith(EditPostRequest editPostRequest);
-    DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest);
+    EditPostResponse editPostWith(EditPostRequest editPostRequest, Post authorPost);
+    DeletePostResponse deletePostWith(DeletePostRequest deletePostRequest, Post authorPost);
     ViewPostResponse addViewWith(ViewPostRequest viewPostRequest, User viewer);
     CommentResponse addCommentWith(CommentRequest commentRequest, User commenter);
     ViewsCountResponse getNumberOfViews(ViewsCountRequest viewsCountRequest);
