@@ -49,8 +49,8 @@ public class PostServicesImpl implements PostServices {
         Post post = findPostBy(viewPostRequest.getPostId());
         View newView = viewServices.saveViewOf(viewer);
         post.getViews().add(newView);
-        posts.save(post);
-        return mapViewPostResponseWith(newView);
+        Post savedPost = posts.save(post);
+        return mapViewPostResponseWith(newView, savedPost);
     }
 
     @Override

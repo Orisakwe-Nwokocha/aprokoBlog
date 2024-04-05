@@ -86,8 +86,9 @@ public final class Mapper {
         return view;
     }
 
-    public static ViewPostResponse mapViewPostResponseWith(View view) {
+    public static ViewPostResponse mapViewPostResponseWith(View view, Post post) {
         ViewPostResponse viewPostResponse = new ViewPostResponse();
+        viewPostResponse.setPost(post.toString());
         viewPostResponse.setViewerId(view.getViewer().getId());
         viewPostResponse.setViewer(view.getViewer().getUsername());
         viewPostResponse.setTimeOfView(DateTimeFormatter
