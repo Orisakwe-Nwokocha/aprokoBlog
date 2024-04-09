@@ -1,8 +1,9 @@
-package africa.semicolon.aprokoBlog.services;
+package africa.semicolon.aprokoBlog.services.impls;
 
 import africa.semicolon.aprokoBlog.data.models.User;
 import africa.semicolon.aprokoBlog.data.models.View;
 import africa.semicolon.aprokoBlog.data.repository.Views;
+import africa.semicolon.aprokoBlog.services.ViewServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

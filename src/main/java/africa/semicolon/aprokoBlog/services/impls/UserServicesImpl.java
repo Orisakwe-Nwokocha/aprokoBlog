@@ -1,4 +1,4 @@
-package africa.semicolon.aprokoBlog.services;
+package africa.semicolon.aprokoBlog.services.impls;
 
 import africa.semicolon.aprokoBlog.data.models.Post;
 import africa.semicolon.aprokoBlog.data.models.User;
@@ -6,6 +6,9 @@ import africa.semicolon.aprokoBlog.data.repository.Users;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.*;
+import africa.semicolon.aprokoBlog.services.PostServices;
+import africa.semicolon.aprokoBlog.services.UserServices;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +78,9 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public ViewPostResponse viewPost(ViewPostRequest viewPostRequest) {
-        if (viewPostRequest.getViewer() == null) return postServices.addViewWith(viewPostRequest, findUserBy("1092abanonymoususer"));
+        instantiateAnonymousUser();
+        if (viewPostRequest.getViewer() == null)
+            return postServices.addViewWith(viewPostRequest, findUserBy("anonymousUser"));
         User viewer = findUserBy(viewPostRequest.getViewer());
         return postServices.addViewWith(viewPostRequest, viewer);
     }
@@ -91,6 +96,17 @@ public class UserServicesImpl implements UserServices {
     public GetUserPostsResponse getUserPosts(GetUserPostsRequest getUserPostsRequest) {
         User foundUser = findUserBy(getUserPostsRequest.getUsername());
         return mapGetUserPostsResponse(foundUser);
+    }
+
+    @PostConstruct
+    private void instantiateAnonymousUser() {
+        String username = cleanup("anonymousUser");
+        if (!users.existsByUsername(username)) {
+            User user = new User();
+            user.setUsername(username);
+            user.setPosts(null);
+            users.save(user);
+        }
     }
 
     private void validateLoginStatusOf(User user) {

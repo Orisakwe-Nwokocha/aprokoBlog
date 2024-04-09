@@ -1,4 +1,4 @@
-package africa.semicolon.aprokoBlog.services;
+package africa.semicolon.aprokoBlog.services.impls;
 
 import africa.semicolon.aprokoBlog.data.models.Comment;
 import africa.semicolon.aprokoBlog.data.models.Post;
@@ -8,6 +8,9 @@ import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.dtos.requests.*;
 import africa.semicolon.aprokoBlog.dtos.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.PostNotFoundException;
+import africa.semicolon.aprokoBlog.services.CommentServices;
+import africa.semicolon.aprokoBlog.services.PostServices;
+import africa.semicolon.aprokoBlog.services.ViewServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

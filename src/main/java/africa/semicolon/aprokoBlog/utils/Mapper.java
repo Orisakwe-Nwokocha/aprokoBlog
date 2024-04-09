@@ -21,7 +21,7 @@ public final class Mapper {
         registerUserResponse.setId(user.getId());
         registerUserResponse.setUsername(user.getUsername());
         registerUserResponse.setDateTimeRegistered(DateTimeFormatter
-                .ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(user.getDateRegistered()));
+                .ofPattern("dd/MMM/yyyy 'at' hh:mm:ss a").format(user.getDateRegistered()));
         return registerUserResponse;
     }
 
@@ -92,7 +92,7 @@ public final class Mapper {
         viewPostResponse.setViewerId(view.getViewer().getId());
         viewPostResponse.setViewer(view.getViewer().getUsername());
         viewPostResponse.setTimeOfView(DateTimeFormatter
-                .ofPattern("dd/MMM/yyyy 'at' HH:mm:ss a").format(view.getTimeOfView()));
+                .ofPattern("dd/MMM/yyyy 'at' hh:mm:ss a").format(view.getTimeOfView()));
         return viewPostResponse;
     }
 
