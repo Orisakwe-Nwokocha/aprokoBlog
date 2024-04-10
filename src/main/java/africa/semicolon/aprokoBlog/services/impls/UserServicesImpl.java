@@ -3,8 +3,8 @@ package africa.semicolon.aprokoBlog.services.impls;
 import africa.semicolon.aprokoBlog.data.models.Post;
 import africa.semicolon.aprokoBlog.data.models.User;
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.*;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.*;
 import africa.semicolon.aprokoBlog.exceptions.*;
 import africa.semicolon.aprokoBlog.services.PostServices;
 import africa.semicolon.aprokoBlog.services.UserServices;
@@ -82,6 +82,7 @@ public class UserServicesImpl implements UserServices {
         if (viewPostRequest.getViewer() == null)
             return postServices.addViewWith(viewPostRequest, findUserBy("anonymousUser"));
         User viewer = findUserBy(viewPostRequest.getViewer());
+        validateLoginStatusOf(viewer);
         return postServices.addViewWith(viewPostRequest, viewer);
     }
 

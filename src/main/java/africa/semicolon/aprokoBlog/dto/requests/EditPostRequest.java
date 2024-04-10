@@ -1,4 +1,4 @@
-package africa.semicolon.aprokoBlog.dtos.requests;
+package africa.semicolon.aprokoBlog.dto.requests;
 
 import lombok.Data;
 

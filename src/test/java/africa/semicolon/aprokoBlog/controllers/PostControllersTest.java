@@ -2,9 +2,9 @@ package africa.semicolon.aprokoBlog.controllers;
 
 import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.ApiResponse;
-import africa.semicolon.aprokoBlog.dtos.responses.CreatePostResponse;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.ApiResponse;
+import africa.semicolon.aprokoBlog.dto.responses.CreatePostResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

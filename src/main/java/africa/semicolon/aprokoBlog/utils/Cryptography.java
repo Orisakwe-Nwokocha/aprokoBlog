@@ -1,7 +1,7 @@
 package africa.semicolon.aprokoBlog.utils;
 
 import africa.semicolon.aprokoBlog.data.models.User;
-import africa.semicolon.aprokoBlog.dtos.requests.LoginRequest;
+import africa.semicolon.aprokoBlog.dto.requests.LoginRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

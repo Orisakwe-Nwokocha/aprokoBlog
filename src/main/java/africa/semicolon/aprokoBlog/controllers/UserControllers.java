@@ -1,13 +1,12 @@
 package africa.semicolon.aprokoBlog.controllers;
 
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.ApiResponse;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.ApiResponse;
 import africa.semicolon.aprokoBlog.exceptions.AprokoBlogAppException;
 import africa.semicolon.aprokoBlog.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import static org.springframework.http.HttpStatus.*;
 

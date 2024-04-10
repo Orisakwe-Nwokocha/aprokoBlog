@@ -1,9 +1,9 @@
 package africa.semicolon.aprokoBlog.utils;
 
 import africa.semicolon.aprokoBlog.data.models.*;
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.*;
-import africa.semicolon.aprokoBlog.dtos.responses.ViewsCountResponse;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.*;
+import africa.semicolon.aprokoBlog.dto.responses.ViewsCountResponse;
 
 import java.time.format.DateTimeFormatter;
 

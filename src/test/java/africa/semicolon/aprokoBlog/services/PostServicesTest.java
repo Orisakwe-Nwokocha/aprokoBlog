@@ -2,7 +2,7 @@ package africa.semicolon.aprokoBlog.services;
 
 import africa.semicolon.aprokoBlog.data.repository.Posts;
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.*;
+import africa.semicolon.aprokoBlog.dto.requests.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

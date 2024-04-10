@@ -1,7 +1,7 @@
 package africa.semicolon.aprokoBlog.services;
 
 import africa.semicolon.aprokoBlog.data.repository.Users;
-import africa.semicolon.aprokoBlog.dtos.requests.*;
+import africa.semicolon.aprokoBlog.dto.requests.*;
 import africa.semicolon.aprokoBlog.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -133,16 +133,18 @@ public class UserServicesTest {
     }
 
     @Test
-    public void userDeletesCreatedPost_numberOfPostsIs0Test() {
+    public void userDeletesCreatedPost_deletedPostIsNullTest() {
         userServices.register(registerRequest);
         userServices.createPost(createPostRequest);
         var foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
         var savedPost = foundUser.getPosts().getFirst();
-        assertThat(foundUser.getPosts().size(), is(1));
+        assertThat(savedPost, notNullValue());
 
         deletePostRequest.setPostId(savedPost.getId());
         var deletePostResponse = userServices.deletePostWith(deletePostRequest);
         foundUser = users.findByUsername(registerRequest.getUsername().toLowerCase());
+        savedPost = foundUser.getPosts().getFirst();
+        assertThat(savedPost, nullValue());
         assertThat(deletePostResponse.getPostId(), notNullValue());
     }
 

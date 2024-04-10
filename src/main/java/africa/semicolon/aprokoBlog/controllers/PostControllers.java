@@ -1,7 +1,7 @@
 package africa.semicolon.aprokoBlog.controllers;
 
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.ApiResponse;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.ApiResponse;
 import africa.semicolon.aprokoBlog.exceptions.AprokoBlogAppException;
 import africa.semicolon.aprokoBlog.services.PostServices;
 import org.springframework.beans.factory.annotation.Autowired;

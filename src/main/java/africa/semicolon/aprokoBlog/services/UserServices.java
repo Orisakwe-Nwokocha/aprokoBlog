@@ -1,7 +1,7 @@
 package africa.semicolon.aprokoBlog.services;
 
-import africa.semicolon.aprokoBlog.dtos.requests.*;
-import africa.semicolon.aprokoBlog.dtos.responses.*;
+import africa.semicolon.aprokoBlog.dto.requests.*;
+import africa.semicolon.aprokoBlog.dto.responses.*;
 
 public interface UserServices {
     RegisterUserResponse register(RegisterRequest registerRequest);
