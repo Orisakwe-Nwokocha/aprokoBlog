@@ -4,6 +4,7 @@ import africa.semicolon.aprokoBlog.dto.requests.*;
 import africa.semicolon.aprokoBlog.dto.responses.ApiResponse;
 import africa.semicolon.aprokoBlog.exceptions.AprokoBlogAppException;
 import africa.semicolon.aprokoBlog.services.UserServices;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class UserControllers {
     }
 
     @PatchMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             var result = userServices.login(loginRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -39,7 +40,7 @@ public class UserControllers {
     }
 
     @PatchMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) {
+    public ResponseEntity<?> logout(@Valid @RequestBody LogoutRequest logoutRequest) {
         try {
             var result = userServices.logout(logoutRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -50,7 +51,7 @@ public class UserControllers {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<?> createPost(@RequestBody CreatePostRequest createPostRequest) {
+    public ResponseEntity<?> createPost(@Valid @RequestBody CreatePostRequest createPostRequest) {
         try {
             var result = userServices.createPost(createPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), CREATED);
@@ -61,7 +62,7 @@ public class UserControllers {
     }
 
     @PutMapping("/edit-post")
-    public ResponseEntity<?> editPost(@RequestBody EditPostRequest editPostRequest) {
+    public ResponseEntity<?> editPost(@Valid @RequestBody EditPostRequest editPostRequest) {
         try {
             var result = userServices.editPostWith(editPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -72,7 +73,7 @@ public class UserControllers {
     }
 
     @DeleteMapping("/delete-post")
-    public ResponseEntity<?> deletePost(@RequestBody DeletePostRequest deletePostRequest) {
+    public ResponseEntity<?> deletePost(@Valid @RequestBody DeletePostRequest deletePostRequest) {
         try {
             var result = userServices.deletePostWith(deletePostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -83,7 +84,7 @@ public class UserControllers {
     }
 
     @PatchMapping("/view-post")
-    public ResponseEntity<?> viewPost(@RequestBody ViewPostRequest viewPostRequest) {
+    public ResponseEntity<?> viewPost(@Valid @RequestBody ViewPostRequest viewPostRequest) {
         try {
             var result = userServices.viewPost(viewPostRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -94,7 +95,7 @@ public class UserControllers {
     }
 
     @PatchMapping("/comment")
-    public ResponseEntity<?> addComment(@RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<?> addComment(@Valid @RequestBody CommentRequest commentRequest) {
         try {
             var result = userServices.reactToPost(commentRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);
@@ -105,7 +106,7 @@ public class UserControllers {
     }
 
     @GetMapping("/view-posts")
-    public ResponseEntity<?> getUserPosts(@RequestBody GetUserPostsRequest getUserPostsRequest) {
+    public ResponseEntity<?> getUserPosts(@Valid @RequestBody GetUserPostsRequest getUserPostsRequest) {
         try {
             var result = userServices.getUserPosts(getUserPostsRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);

@@ -4,6 +4,7 @@ import africa.semicolon.aprokoBlog.dto.requests.*;
 import africa.semicolon.aprokoBlog.dto.responses.ApiResponse;
 import africa.semicolon.aprokoBlog.exceptions.AprokoBlogAppException;
 import africa.semicolon.aprokoBlog.services.PostServices;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class PostControllers {
     private PostServices postServices;
 
     @GetMapping("/number-of-views")
-    public ResponseEntity<?> getViewsCount(@RequestBody ViewsCountRequest viewsCountRequest) {
+    public ResponseEntity<?> getViewsCount(@Valid @RequestBody ViewsCountRequest viewsCountRequest) {
         try {
             var result = postServices.getNumberOfViews(viewsCountRequest);
             return new ResponseEntity<>(new ApiResponse(true, result), OK);

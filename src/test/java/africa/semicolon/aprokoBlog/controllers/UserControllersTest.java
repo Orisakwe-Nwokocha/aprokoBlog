@@ -205,9 +205,8 @@ public class UserControllersTest {
     public void testViewPost_isSuccessful_isFalse() {
         ViewPostRequest viewPostRequest = new ViewPostRequest();
         userControllers.register(registerRequest);
-        var response = userControllers.createPost(createPostRequest);
-        viewPostRequest.setPostId(getCreatedPostId(response));
-        response = userControllers.viewPost(viewPostRequest);
+        viewPostRequest.setPostId("");
+        var response = userControllers.viewPost(viewPostRequest);
         assertIsSuccessful(response, false);
         assertThat(response.getStatusCode(), is(BAD_REQUEST));
     }
